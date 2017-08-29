@@ -1,0 +1,51 @@
+<div>
+	<div class="row text-center">
+	<h1>Welcome <%= @user.email %></h1>
+	<%= link_to('Logout', destroy_user_session_path, method: :delete) %>
+	<h3>Credit Balance: <%= @amount %></h3>
+	</div>
+
+	<div class="row">
+		<div class="col-md-6 col-md-offset-3"
+			<h2>Send credits to another user</h2>
+			<% @users.each do |user| %>
+				<%= form_tag(user_send_credits_path, :class => "form-inline", method: "post") do %>
+					<%= label_tag(:email, user.email) %>
+					<%= hidden_field_tag(:email, user.email) %>
+					<%= number_field_tag(:credits, :class => "form-control") %>
+					<%= submit_tag("Send Credits") %>
+				<% end %>
+			<% end %>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-6">
+			<h2>Credits</h2>
+			<table class="table table-condensed">
+			<th>Date</th>
+			<th>Amount</th>
+			<% @credits.each do |credit| %>
+				<tr>
+					<td><%= credit.created_at %></td>
+					<td><%= credit.amount %></td>
+				</tr>
+			<% end %>
+			</table>
+		</div>
+
+		<div class="col-md-6">
+			<h2>Debits</h2>
+			<table class="table table-condensed">
+			<th>Date</th>
+			<th>Amount</th>
+			<% @debits.each do |debit| %>
+				<tr>
+					<td><%= debit.created_at %></td>
+					<td><%= debit.amount %></td>
+				</tr>
+			<% end %>
+			</table>
+		</div>
+	</div>
+</div>

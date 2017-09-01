@@ -4,6 +4,10 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
+    def CreateTransaction(to_user, credits)
+    	t = Transaction.new
+		return t.NewTransaction(self.id, to_user, credits)
+    end
 
    def GetCreditTotal
    		@credits = Transaction.where(to_id: self.id)

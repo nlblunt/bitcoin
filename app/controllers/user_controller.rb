@@ -26,7 +26,6 @@ class UserController < ApplicationController
 
 		#If using external API call, return current user
 		#respond {email: @user.email, credits: @amount}
-
 	end
 
 	#POST /user/send_credits
@@ -51,11 +50,18 @@ class UserController < ApplicationController
 			return
 		end
 
-		#Create the new transaction
+		#Create the new transaction & save the result
 		t = Transaction.new
-		t.NewTransaction(current_user.id, to_user.id, params[:credits])
-		flash[:notice] = "Sent " + params[:credits] + " credits to " + to_user.email
+		result = t.NewTransaction(current_user.id, to_user.id, params[:credits])
+		
+		#Display result message
+		if result == :success
+			flash[:notice] = "Sent " + params[:credits] + " credits to " + to_user.email
+		else result == :error
+			flash[:notice] = "Not enough credits to send"
+		end
 
+		#Reload user index page
 		redirect_to '/user/index'
 	end
 
